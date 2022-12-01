@@ -10,12 +10,12 @@ import time
 from dice import Dice
 from typing import List, Protocol
 
-
+#design pattern observer
 class Observer(Protocol):
     def __call__(self) -> None:
         ...
 
-
+#designing the observable for the observer
 class Observable:
     def __init__(self) -> None:
         self._observers: list[Observer] = []
@@ -33,14 +33,14 @@ class Observable:
 
 Hand = List[int]
 
-
+#Using inheritance so he keeps a list of the rolls
 class ZonkHandHistory(Observable):
     def __init__(self, player: str, dice_set: Dice) -> None:
         super().__init__()
         self.player = player
         self.dice_set = dice_set
         self.rolls: list[Hand]
-
+#rolling hand
     def start(self) -> Hand:
         self.dice_set.roll()
         self.rolls = [self.dice_set.dice]
@@ -53,7 +53,7 @@ class ZonkHandHistory(Observable):
         self._notify_observers()  # State change
         return self.dice_set.dice
 
-
+#inheriting the observer class so her can keep track 
 class SaveZonkHand(Observer):
     def __init__(self, hand: ZonkHandHistory) -> None:
         self.hand = hand
@@ -161,7 +161,7 @@ SaveZonkHand {'player': 'David', 'sequence': 2, 'hands': '[[2, 3, 4, 4, 6, 6], [
 
 """
 
-
+#randomizing with seeds
 def find_seed() -> None:
     d = Dice.from_text("6d6")
     player = ZonkHandHistory("David", d)
